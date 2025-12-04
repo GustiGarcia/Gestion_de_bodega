@@ -5,6 +5,7 @@ from models.crianza_almacenamiento import CrianzaAlmacenamiento
 from models.loteVino import LoteVino # Necesitamos importar LoteVino para el dropdown
 from models.db import db
 from models.estados.estado_crianza import EstadoCrianza
+from flask_login import login_required  # ← AGREGAR ESTA IMPORTACIÓN
 
 # Creamos el blueprint para crianza_almacenamiento
 crianza_bp = Blueprint('crianza_bp', __name__)
@@ -168,12 +169,14 @@ def borrar_almacenamiento_api(id):
 # RUTAS PARA LA INTERFAZ DE USUARIO (HTML) - Para el navegador web
 # URL: /crianza/menu
 @crianza_bp.route('/menu', methods=['GET'])
+@login_required  # ← AGREGADO
 def menu_crianzas():
     return render_template('crianza/menuCrianza.html')
 
 # Ruta para listar todas las crianzas/almacenamientos (HTML)
 # URL: /crianza/listar
 @crianza_bp.route('/listar', methods=['GET'])
+@login_required  # ← AGREGADO
 def listar_crianzas_html():
     crianzas = CrianzaAlmacenamiento.query.all()
     estados=list(EstadoCrianza)
@@ -183,6 +186,7 @@ def listar_crianzas_html():
 # Ruta para mostrar el formulario de creación de crianza/almacenamiento (GET HTML)
 # URL: /crianza/crear
 @crianza_bp.route('/crear', methods=['GET'])
+@login_required  # ← AGREGADO
 def mostrar_formulario_crianza():
     lotes = LoteVino.query.all() # Necesitamos pasar los lotes para el dropdown
     estados=list(EstadoCrianza)
@@ -191,6 +195,7 @@ def mostrar_formulario_crianza():
 # Ruta para manejar el envío del formulario de creación de crianza/almacenamiento (POST HTML)
 # URL: /crianza/crear
 @crianza_bp.route('/crear', methods=['POST'])
+@login_required  # ← AGREGADO
 def crear_crianza_html():
     estado=request.form['estado']
     estado_enum=EstadoCrianza[estado]
@@ -250,6 +255,7 @@ def crear_crianza_html():
 # Ruta para mostrar y procesar el formulario de edición de crianza/almacenamiento (GET/POST HTML)
 # URL: /crianza/editar/<id>
 @crianza_bp.route('/editar/<string:id>', methods=['GET', 'POST'])
+@login_required  # ← AGREGADO
 def editar_crianza_html(id):
     crianza = CrianzaAlmacenamiento.query.get_or_404(id)
     lotes = LoteVino.query.all() # Necesitamos los lotes para el dropdown
@@ -307,6 +313,7 @@ def editar_crianza_html(id):
 # Ruta para borrar una crianza/almacenamiento (POST HTML)
 # URL: /crianza/borrar/<id>
 @crianza_bp.route('/borrar/<string:id>', methods=['POST'])
+@login_required  # ← AGREGADO
 def borrar_crianza_html(id):
     crianza = CrianzaAlmacenamiento.query.get_or_404(id)
     
@@ -319,5 +326,6 @@ def borrar_crianza_html(id):
 
 # Ruta principal para el blueprint (redirecciona al menú HTML)
 @crianza_bp.route('/', methods=['GET'])
+@login_required  # ← AGREGADO
 def index_crianza():
     return redirect(url_for('crianza_bp.menu_crianzas'))

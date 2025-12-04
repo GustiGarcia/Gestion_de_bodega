@@ -2,10 +2,6 @@
 venv/
 venvGestionBodega/
 images/
-<<<<<<< HEAD
-
-=======
->>>>>>> Nahuel_Develop_Test
 # Archivos de compilación de Python
 __pycache__/
 *.pyc
@@ -37,3 +33,7 @@ Thumbs.db   # Windows
 
 # Archivos de documentacion generados
 estructura_directorio.txt
+
+.env
+
+venvGestion/
